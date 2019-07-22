@@ -1,2 +1,20 @@
-@import "normalize";
-@import "base";
+// the universal selector (*)
+// ul elements
+// p elements 
+
+// only
+//BASE STYLES
+
+
+* {
+	box-sizing: border-box;
+}
+
+ul {
+    list-style-type: none;
+}
+
+p {
+    line-height: 25px;
+    font-size: 14px;
+}

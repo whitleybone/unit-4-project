@@ -1,68 +1,67 @@
-// **********************************************
-// _grid.scss
-// styles related to the grid system and
-// main container.
-// major grid styles have been added here for you
-// but additional styling may be needed
-// **********************************************
 
-
-// grid base class
-.grid {
-
-  // .grid__row
-  &__row {
-    padding: 1em 10px;
-    display: flex;
-    flex-direction: column;
-
-    // NOTE: replace with media query mixin if aiming for exceeds
-    @media (min-width: 768px) {
-      flex-direction: row;
-    }
-  }
-
-  // .grid__col
-  &__col {
-
-    // create grid columns dynamically
-    // loop through each column size
-    @for $i from 1 through 12 {
-
-      // concatenate CSS selector, ie when $i = 1,
-      // selector would be .grid__col--1
-      &--#{$i} {
-
-        // base styles applied to all grid columns 
-        // NOTE: could be converted to a placeholder, along with margin
-        // from the  media query
-        margin-top: 10px;
-        flex-basis: 100%;
-
-        // NOTE: replace with media query mixin if aiming for exceeds
-        @media (min-width: 768px) {
-
-          // base stlyes applied to all grid columns
-          margin-top: 0;
-
-          // make column width a percentage of the column number / total columns
-          flex-basis: #{$i / 12 * 100 + "%"} ;
+@for $i from 1 through $g-col-count {
+    .grid__col--#{$i}.theme__colors{
+        @extend %grid-styles;
+        margin: 0 px(5px) px(50px);
+        &:last-of-type {
+            margin-bottom: px(50px);
         }
-      }
+
+        //margin for grid system
+        @include mq(small) {
+            margin-bottom: px(5px);
+            // margin-right: px(15px);
+            &:last-child {  
+                margin-bottom: px(40px);  
+            }          
+        }
     }
-  }
 }
 
-// targets all elements with classes that begin with grid__col
-[class^=grid__col] {
-  // grid__col + grid__col, targets two sibling columns
-  & + & {
 
-    // NOTE: replace with media query mixin if aiming for exceeds
-    @media (min-width: 768px) {
+//grid max-width
+@include mq(medium) {
+    @for $i from 1 through $g-col-count {
 
-      // add grid gutter
-      margin-left: 10px;
+    $context: g-context($g-col-width, $g-col-count, $g-gutter-width);
+    $target: ($g-col-width * $i)  +  ($g-gutter-width * ($i - 1));
+
+        .grid__col--#{$i}{
+            width: percentage($target, $context);
+        }
     }
-  }
 }
+
+
+//flex for grids
+
+.grid {
+    @include mq(medium) {
+        @include e(row) {
+            @include flex(flex, $just: space-between);
+            .centered {
+                display: block;
+                margin: auto;
+            }
+        }
+    }
+
+    //background color for each grid__col in grid system
+    &__col {
+        @include grid-background-color;
+    }
+}
+
+//button grid
+
+.grid__col {
+    @include mq(medium) {
+        @include m(12) {
+            .theme__colors {
+                margin: 1.875em 1em;
+            }
+            @include flex(flex);
+        }
+    }
+}
+
